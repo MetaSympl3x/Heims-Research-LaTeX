@@ -220,16 +220,22 @@
 % Headers and Footers (Using KOMA-Script's scrlayer-scrpage)
 \usepackage[automark]{scrlayer-scrpage} % Automark generates chapter/section names for headers
 \clearpairofpagestyles
-\ohead{\color{darkgray}\rule[-2pt]{0.2pt}{10pt}\quad\textsf{\leftmark}}
-\ofoot{\thepage} % Moves page numbers to the outer margin safely away from the binding % Outer header for even/odd pages
-\cfoot{\small\color{darkgray}\textsf{A Modernized Syntrometric Logic}} % Centered footer in a subtle gray
+
+% Positioning for Two-Sided Book Layout:
+% - Left-hand (Even) pages: Chapter title on the left (outer) header with bar on the left
+% - Right-hand (Odd) pages: Section title on the right (outer) header with bar on the right
+\lehead{\color{textcolor}\rule[-2pt]{0.5pt}{10pt}\quad\textsf{\leftmark}}
+\rohead{\textsf{\rightmark}\quad\color{textcolor}\rule[-2pt]{0.5pt}{10pt}}
+
+% Page numbers in the outer footer (Left on Even, Right on Odd)
+\ofoot{\thepage} 
+\cfoot{\small\textsf{A Modernized Syntrometric Logic}} 
 \pagestyle{scrheadings} % Apply this custom page style
 
-% Add a line under the header for a more distinct look
-\addtokomafont{pageheadfoot}{\normalfont} % Ensure header/footer font is normal
-\setkomafont{pagehead}{\normalfont\color{darkgray}}
-\setkomafont{pagefoot}{\normalfont\color{darkgray}}
-\ohead{\makebox[\linewidth][r]{\color{darkgray}\rule{0.2pt}{10pt}\quad\textsf{\leftmark}}} % Example of a line to the right of text
+% Header and footer font styling (switched from light grey to textcolor)
+\addtokomafont{pageheadfoot}{\normalfont\color{textcolor}} 
+\setkomafont{pagehead}{\normalfont\color{textcolor}}
+\setkomafont{pagefoot}{\normalfont\color{textcolor}}
 
 % Further styling for the TOC (optional but common for enhanced style)
 \usepackage{tocloft} % For more control over TOC, LoF, LoT
