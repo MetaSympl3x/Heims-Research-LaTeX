@@ -124,78 +124,72 @@
 \usepackage{bookmark}
 
 
-%%======================================================================
+%======================================================================
 % 5. CUSTOM THEOREM & DEFINITION BOXES (with tcolorbox)
 %======================================================================
 \usepackage[most]{tcolorbox}
 \usepackage{fontawesome5} % For cool icons like gavels and books
 \tcbuselibrary{breakable, theorems, skins} % 'skins' provides more styling options
 
-% Define a new theorem style with a blue theme and an icon
-\newtcbtheorem[auto counter,
-  crefname={Theorem}{Theorems}, Crefname={Theorem}{Theorems}]
-  {mytheorem}{Theorem}{
+% Custom counter for theorems, definitions, and lemmas (resets per chapter)
+\newcounter{mytheoremcounter}[chapter]
+\renewcommand{\themytheoremcounter}{\thechapter.\arabic{mytheoremcounter}}
+
+% Define mytheorem to accept standard optional arguments: \begin{mytheorem}[Title]
+\newtcolorbox{mytheorem}[1][]{
   enhanced, breakable,
-  colback=boxbgcolor,             % Light blue background
-  colframe=boxframecolor,         % Darker blue frame
-  fonttitle=\bfseries\sffamily,   % Sans-serif bold for title
-  % Title includes an icon, the counter, and the user-provided title
-  title={\faGavel\quad Theorem \thetcbcounter: #2},
-  % Styling for the title box
+  colback=boxbgcolor,             
+  colframe=boxframecolor,         
+  fonttitle=\bfseries\sffamily,   
   attach boxed title to top left={yshift=-2mm, xshift=3mm},
   boxed title style={colback=maincolor!85!black, sharp corners, frame hidden},
-  % FIX 1: The 'borderline west' option syntax was incorrect.
-  % It expects two arguments for the thickness and color.
-  borderline west={2pt}{maincolor!70!black}, % A nice left border
-  boxsep=5pt,                    % Padding inside the box
-  boxrule=0.5pt,                 % Thickness of the frame
-  }{thm} % 'thm' is the prefix for labels, e.g., \label{thm:soundness}
+  borderline west={2pt}{0pt}{maincolor!70!black}, 
+  boxsep=5pt,                    
+  boxrule=0.5pt,                 
+  code={\refstepcounter{mytheoremcounter}},
+  title={\faGavel\quad Theorem \themytheoremcounter\ifstrempty{#1}{}{: #1}}
+}
 
-% Define a new definition style with a gray theme and an icon
-\newtcbtheorem[use counter from=mytheorem, % Shares the same counter as theorems
-  crefname={Definition}{Definitions}, Crefname={Definition}{Definitions}]
-  {mydefinition}{Definition}{
+% Define mydefinition to accept standard optional arguments: \begin{mydefinition}[Title]
+\newtcolorbox{mydefinition}[1][]{
   enhanced, breakable,
   colback=lightgray,
   colframe=mediumgray,
   fonttitle=\bfseries\sffamily,
-  title={\faBook\quad Definition \thetcbcounter: #2},
   attach boxed title to top left={yshift=-2mm, xshift=3mm},
   boxed title style={colback=mediumgray!90!black, sharp corners, frame hidden},
-  % FIX 1: Corrected syntax for 'borderline west' here too.
-  borderline west={2pt}{mediumgray!70!black},
+  borderline west={2pt}{0pt}{mediumgray!70!black},
   boxsep=5pt,
   boxrule=0.5pt,
-  }{def}
+  code={\refstepcounter{mytheoremcounter}},
+  title={\faBook\quad Definition \themytheoremcounter\ifstrempty{#1}{}{: #1}}
+}
 
-% Define a more subtle lemma style
-\newtcbtheorem[use counter from=mytheorem,
-  crefname={Lemma}{Lemmas}, Crefname={Lemma}{Lemmas}]
-  {mylemma}{Lemma}{
+% Define mylemma to accept standard optional arguments: \begin{mylemma}[Title]
+\newtcolorbox{mylemma}[1][]{
   enhanced, breakable,
   colback=lightgray!50!white, colframe=lightgray!90!black,
-  fonttitle=\bfseries, % Keep default font for simpler lemmas
-  title={Lemma \thetcbcounter: #2},
+  fonttitle=\bfseries, 
   attach boxed title to top left={yshift=-2mm, xshift=3mm},
   boxed title style={colback=lightgray!90!black, sharp corners, frame hidden},
-  % FIX 1: Corrected syntax for 'borderline west' here too.
-  borderline west={1pt}{lightgray!70!black},
+  borderline west={1pt}{0pt}{lightgray!70!black},
   boxsep=5pt,
   boxrule=0.2pt,
-  }{lem}
+  code={\refstepcounter{mytheoremcounter}},
+  title={Lemma \themytheoremcounter\ifstrempty{#1}{}{: #1}}
+}
 
-% Define a custom proof environment
-\newtcbtheorem{myproof}{Proof}{
+% Define myproof to accept standard optional arguments: \begin{myproof}[Proof Sketch]
+\newtcolorbox{myproof}[1][]{
   enhanced, breakable,
-  colback=black!3!white, % Very light gray background
-  colframe=black!20!white, % Subtle frame
+  colback=black!3!white, 
+  colframe=black!20!white, 
   fonttitle=\itshape,
-  title={Proof\ifx\relax#1\relax\else\tcbtheoremdivider #1\fi},
+  title={Proof\ifstrempty{#1}{}{ : #1}},
   boxsep=5pt,
   boxrule=0.2pt,
-  % FIX 2: Corrected 'enforce break' to 'enforce breakable'.
-  enforce breakable, % Allows breaking across pages
-  }{proof}
+  enforce breakable, 
+}
 
 
 %======================================================================
@@ -440,6 +434,7 @@
 
 
 %   CHAPTER 1A - REVmediate subjective aspectual content (\(\Smodx\)) from those representing abstract, recursively generated Syntrix syndromes (\(\Propk{k}\)), with explicit level indexing reflecting the depth of conceptual synthesis.
+\begin{itemize}
     \item   Specialized \textbf{modal operators}: These include \(\BoxS\) to formalize Heim’s notion of aspect-relative necessity or truth-invariance across experientially similar subjective states, and \(\BoxSyn\) to capture the concept of intrinsic structural stability and apodictic inheritance within the generative hierarchy of the Syntrix.
     \item   \textbf{Dynamic logic operators}: Specifically, \(\dynboxgen{\piF}\) and \(\dyndiamondgen{\piF}\) are introduced to model the generative action of Heim’s Synkolator (\(F\)) as a discrete, state-transforming program (\(\piF\)) that advances the Syntrix through its structural levels.
     \item   A \textbf{Kripke-style possible worlds semantics}: This provides the formal interpretation for \(\LMSL\). Worlds \(w\) are rigorously defined as \textbf{leveled subjective states}, \(w = (\Smodx, k)\), where \(\Smodx\) represents the current subjective aspectual content and \(k\) denotes the maximal Syntrix level of structural complexity considered active or realized. This dual-component world structure allows for nuanced truth conditions that explicitly respect both experiential content and hierarchical depth. Accessibility and transition relations (\(R_{\BoxS}, R_{\piF}\)) are defined to model aspectual shifts and Synkolator-driven evolution.
@@ -835,11 +830,11 @@ This leveled sequent calculus, with its specialized rules for aspectual content,
 
 The soundness of a proof system ensures that its syntactic derivations correspond to semantic truths; that is, if a formula is provable, it must be valid according to the defined semantics. We state the soundness theorem for MSL and provide a sketch of its proof.
 
-\begin{theorem}[Soundness of MSL]
+\begin{mytheorem}[Soundness of MSL]
 If a sequent \(S(x); \Gamma \turnstilek{k} \phi\) is derivable in the MSL sequent calculus, then it is semantically valid with respect to the Kripke semantics defined in Section 1A.2. That is, for any MSL Kripke Model \(\mathcal{M}\) and any world \(w = (\Smodx, k_{level}) \in W\) in \(\mathcal{M}\) (where \(k_{level} = k\) and \(\Smodx\) is the aspect content determined by the context \(S(x)\)), if \(w \vDash \Gamma'\) (where \(\Gamma'\) includes all formulas in \(\Gamma\) and any non-logical axioms from \(S(x)\) relevant at level \(k\)), then \(w \vDash \phi\).
-\end{theorem}
+\end{mytheorem}
 
-\begin{proof}[Proof Sketch]
+\begin{myproof}[Proof Sketch]
 The proof proceeds by induction on the length of the derivation of \(S(x); \Gamma \turnstilek{k} \phi\). We need to show that all axioms of the sequent calculus are semantically valid and that all inference rules preserve semantic validity.
 
 \begin{itemize}
@@ -874,18 +869,18 @@ The proof proceeds by induction on the length of the derivation of \(S(x); \Gamm
         \end{itemize}
 \end{itemize}
 Since all axioms are valid and all inference rules preserve semantic validity, any derivable sequent in MSL is semantically valid.
-\end{proof}
+\end{myproof}
 
 \subsection*{1A.5 Completeness of the Syntrometric Fragment for MSL}
 \addcontentsline{toc}{subsection}{1A.5 Completeness of the Syntrometric Fragment for MSL}
 
 Completeness ensures that every semantically valid formula (or sequent) is provable within the deductive system. For complex multi-modal, leveled logics, strong completeness (for entailment from arbitrary premise sets \(\Gamma\)) is often challenging and typically proven for specific well-behaved fragments.
 
-\begin{theorem}[Strong Completeness for a Well-Behaved MSL Fragment]
+\begin{mytheorem}[Strong Completeness for a Well-Behaved MSL Fragment]
 If a sequent \(S(x); \Gamma_G \modelsk{k} \phi\) is semantically valid (where \(\Gamma_G\) contains only global axioms or formulas of \(\LMSL\) whose truth is independent of the specific \(S(x)\) context, and \(\phi \in \mathcal{L}_k\)), then \(S(x); \Gamma_G \turnstilek{k} \phi\) is derivable in the MSL sequent calculus.
-\end{theorem}
+\end{mytheorem}
 
-\begin{proof}[Proof Sketch]
+\begin{myproof}[Proof Sketch]
 The proof employs a Henkin-style canonical model construction, adapted for our leveled logic. The main steps are:
 
 \begin{enumerate}[label=\arabic*.]
@@ -903,6 +898,7 @@ The proof employs a Henkin-style canonical model construction, adapted for our l
                 \end{itemize}
             \item   \textbf{Valuation (\(V^c\)):} For any \(w^c = (\Delta',k')\) and any \(\chi \in \mathcal{L}_{k'}\), \(V^c(w^c, \chi) = \text{True} \iff \chi \in \Delta'\).
         \end{itemize}
+    
 
     \item  \textbf{Truth Lemma:} For any canonical world \(w^c = (\Delta', k')\) and any formula \(\phi \in \mathcal{L}_{k'}\), it holds that \(w^c \vDash \phi \iff \phi \in \Delta'\).
         \begin{itemize}
@@ -923,7 +919,7 @@ The proof employs a Henkin-style canonical model construction, adapted for our l
 
     \item  \textbf{Conclusion:} This shows that \(S(x); \Gamma_G \not\modelsk{k} \phi\). By contraposition, if \(S(x); \Gamma_G \modelsk{k} \phi\), then \(S(x); \Gamma_G \turnstilek{k} \phi\). This establishes the strong completeness of the MSL fragment.
 \end{enumerate}
-\end{proof}
+\end{myproof}
 
 \subsection*{1A.6 Chapter 1A: Summary and Conclusion – A Rigorous Logical Edifice for Modernized Syntrometrie}
 \addcontentsline{toc}{subsection}{1A.6 Chapter 1A: Summary and Conclusion – A Rigorous Logical Edifice for Modernized Syntrometrie}
